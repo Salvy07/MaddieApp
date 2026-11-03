@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Hi Madz</title>
+<meta name="theme-color" content="#ffd6e7">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Madz">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%23ffd6e7'/%3E%3Ctext x='50' y='68' font-size='56' text-anchor='middle'%3E%F0%9F%92%97%3C/text%3E%3C/svg%3E">
+<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'%3E%3Crect width='180' height='180' fill='%23ffd6e7'/%3E%3Cpath d='M90 145 C30 105 25 70 50 52 C68 40 85 50 90 62 C95 50 112 40 130 52 C155 70 150 105 90 145Z' fill='%23ff5c9a'/%3E%3C/svg%3E">
+<style>
+  :root {
+    --bg: #fff0f6;
+    --bg2: #ffe0ee;
+    --card: #ffffff;
+    --pink: #ff5c9a;
+    --pink-soft: #ffc2da;
+    --pink-pale: #ffe6f0;
+    --text: #5a2340;
+    --muted: #a0607f;
+    --shadow: 0 6px 20px rgba(255, 92, 154, 0.18);
+  }
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  html, body { margin: 0; padding: 0; }
+  html { background: var(--bg); }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Rounded", "Nunito", "Segoe UI", Roboto, sans-serif;
+    background: linear-gradient(180deg, var(--bg2) 0%, var(--bg) 40%, var(--bg) 100%);
+    color: var(--text);
+    min-height: 100vh;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap {
+    max-width: 560px;
+    margin: 0 auto;
+    padding: calc(env(safe-area-inset-top) + 28px) 16px calc(env(safe-area-inset-bottom) + 40px);
+  }
+  header { text-align: center; margin-bottom: 24px; }
+  h1 {
+    font-size: 2.4rem;
+    margin: 0;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+    color: var(--pink);
+  }
+  .heart {
+    display: inline-block;
+    color: var(--pink);
+    font-size: 0.8em;
+    animation: beat 1.6s ease-in-out infinite;
+    transform-origin: center;
+  }
+  @keyframes beat {
+    0%, 100% { transform: scale(1); }
+    15% { transform: scale(1.2); }
+    30% { transform: scale(1); }
+    45% { transform: scale(1.12); }
+  }
+  .date { color: var(--muted); font-size: 0.95rem; margin-top: 4px; }
+
+  h2 {
+    font-size: 1.15rem;
+    margin: 0 0 12px 4px;
+    color: var(--text);
+    font-weight: 700;
+  }
+  section { margin-bottom: 32px; }
+
+  .note {
+    background: var(--card);
+    border-radius: 22px;
+    padding: 24px 22px;
+    box-shadow: var(--shadow);
+    border: 2px solid var(--pink-soft);
+    position: relative;
+    font-size: 1.2rem;
+    font-weight: 500;
+    animation: fadeUp .6s ease both;
+  }
+  .note::before {
+    content: "💌";
+    position: absolute;
+    top: -16px;
+    right: 18px;
+    font-size: 1.8rem;
+  }
+  .note .num { display: block; font-size: 0.8rem; color: var(--muted); margin-top: 12px; font-weight: 600; }
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14px;
+  }
+  .env {
+    position: relative;
+    appearance: none;
+    border: none;
+    font: inherit;
+    color: inherit;
+    text-align: left;
+    background: var(--pink-pale);
+    border-radius: 16px;
+    padding: 0;
+    aspect-ratio: 4 / 3;
+    box-shadow: var(--shadow);
+    overflow: hidden;
+    cursor: pointer;
+    transition: transform .15s ease;
+  }
+  .env:active { transform: scale(0.96); }
+  .env .flap {
+    position: absolute;
+    inset: 0 0 auto 0;
+    height: 40%;
+    background: var(--pink-soft);
+    clip-path: polygon(0 0, 100% 0, 50% 100%);
+  }
+  .env .seal {
+    position: absolute;
+    left: 50%;
+    top: 38%;
+    transform: translate(-50%, -50%);
+    width: 30px; height: 30px;
+    border-radius: 50%;
+    background: var(--pink);
+    color: #fff;
+    display: grid; place-items: center;
+    font-size: 0.9rem;
+    box-shadow: 0 2px 6px rgba(0,0,0,.15);
+  }
+  .env .label {
+    position: absolute;
+    left: 10px; right: 10px; bottom: 8px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    line-height: 1.2;
+    text-align: center;
+  }
+  .env .opened {
+    position: absolute;
+    top: 6px; right: 6px;
+    background: #fff;
+    color: var(--pink);
+    font-size: 0.65rem;
+    font-weight: 800;
+    padding: 2px 7px;
+    border-radius: 999px;
+    letter-spacing: .3px;
+    text-transform: uppercase;
+    display: none;
+  }
+  .env.is-opened .opened { display: block; }
+  .env.is-opened .seal { background: #fff; color: var(--pink); }
+
+  /* Modal */
+  .overlay {
+    position: fixed; inset: 0;
+    background: rgba(90, 35, 64, 0.35);
+    -webkit-backdrop-filter: blur(4px);
+    backdrop-filter: blur(4px);
+    display: flex; align-items: center; justify-content: center;
+    padding: 20px;
+    opacity: 0; pointer-events: none;
+    transition: opacity .3s ease;
+    z-index: 10;
+  }
+  .overlay.show { opacity: 1; pointer-events: auto; }
+  .letter-wrap {
+    width: 100%;
+    max-width: 420px;
+    perspective: 1000px;
+  }
+  .big-env {
+    position: relative;
+    background: var(--pink-soft);
+    border-radius: 18px;
+    padding-top: 70px;
+    box-shadow: 0 20px 50px rgba(255, 92, 154, .35);
+    transform: translateY(40px) scale(.85);
+    transition: transform .45s cubic-bezier(.2, 1.3, .4, 1);
+  }
+  .overlay.show .big-env { transform: none; }
+  .big-flap {
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 90px;
+    background: var(--pink);
+    clip-path: polygon(0 0, 100% 0, 50% 100%);
+    transform-origin: top center;
+    transition: transform .5s ease .25s;
+    border-radius: 18px 18px 0 0;
+    z-index: 2;
+  }
+  .overlay.show .big-flap { transform: rotateX(180deg); z-index: 0; }
+  .paper {
+    position: relative;
+    z-index: 1;
+    background: #fff;
+    margin: 0 14px;
+    border-radius: 14px 14px 0 0;
+    padding: 22px 20px 26px;
+    max-height: 62vh;
+    overflow-y: auto;
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity .4s ease .55s, transform .5s ease .55s;
+  }
+  .overlay.show .paper { opacity: 1; transform: translateY(-40px); }
+  .paper h3 { margin: 0 0 12px; color: var(--pink); font-size: 1.15rem; }
+  .paper p { margin: 0; font-size: 1.1rem; white-space: pre-wrap; }
+  .paper .sig { margin-top: 16px; text-align: right; color: var(--muted); font-weight: 600; }
+  .close {
+    display: block;
+    margin: -20px auto 0;
+    position: relative;
+    z-index: 3;
+    appearance: none;
+    border: none;
+    background: var(--pink);
+    color: #fff;
+    font: inherit;
+    font-weight: 700;
+    padding: 12px 28px;
+    border-radius: 999px;
+    box-shadow: var(--shadow);
+    cursor: pointer;
+    transform: translateY(-14px);
+  }
+  .big-env-bottom { height: 20px; }
+
+  footer { text-align: center; color: var(--muted); font-size: 0.85rem; }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation: none !important; transition: none !important; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>Hi Madz <span class="heart">♥</span></h1>
+    <div class="date" id="date"></div>
+  </header>
+
+  <section>
+    <h2>Today's note</h2>
+    <div class="note" id="note"></div>
+  </section>
+
+  <section>
+    <h2>Open when…</h2>
+    <div class="grid" id="grid"></div>
+  </section>
+
+  <footer>made with love, just for you ♥</footer>
+</div>
+
+<div class="overlay" id="overlay" role="dialog" aria-modal="true" aria-labelledby="letterTitle">
+  <div class="letter-wrap" id="letterWrap">
+    <div class="big-env">
+      <div class="big-flap"></div>
+      <div class="paper">
+        <h3 id="letterTitle"></h3>
+        <p id="letterBody"></p>
+        <div class="sig">♥</div>
+      </div>
+      <div class="big-env-bottom"></div>
+    </div>
+    <button class="close" id="closeBtn" type="button">Close ♥</button>
+  </div>
+</div>
+
+<script>
+  var NOTES = [
+    "Good morning Madz. Yes, I'm thinking about you right now, and no I won't stop.",
+    "Daily reminder that you're stuck with me.",
+    "Redeem for 1 free butt poke!",
+    "You're the funniest person I know and it's honestly annoying how good you are at it.",
+    "Currently missing you again… Shocking.",
+    "Rate today 1–10. Then text me why.",
+    "Officially banning you from being stressed today.",
+    "One day closer to stealing all the blankets again.",
+    "Have you been drinking enough water? Even though you may not need beauty sleep, you for sure need water. DRINK!",
+    "Pretty sure you're the reason the sun comes out. Have you seen what it does to your eyes?",
+    "My hoodie still smells like you, so you're basically here right now.",
+    "Reminder: you're smarter than you think, and I'm always right, so.",
+    "If you're reading this, you owe me a selfie.",
+    "I was thinking we should get married, have kids, and grow old together. Let me know if you agree.",
+    "Being in a bad mood is not allowed today, the world needs your beautiful heart and beaming smile.",
+    "Maddie take (my new name for a hot take): you're the best thing that's ever happened to me.",
+    "I'd say \"I miss you\" but you're probably sick of hearing it. Too bad Madz. Miss you baby.",
+    "If I could teleport, you'd be very annoyed by how often I'd show up.",
+    "You make my worst days better without even trying. Show off.",
+    "I'm so proud of you. For literally everything. Stay golden, Maddie.",
+    "Text me something that made you laugh today. Mine was you.",
+    "I love you. Now go conquer the day sweetheart.",
+    "Counting down the days until I can annoy you in person again.",
+    "You are perfect my darling, there is not a flaw in you.",
+    "Fun fact from your astronomy class, there are billions of stars and you're still the one I'd pick.",
+    "Out of everyone in the universe, I got you. Biggest win of my life. And the luckiest man in the world.",
+    "Miles between us, and you're still the closest person to me.",
+    "Of all the timelines out there, I'm glad I'm in the one with you.",
+    "You're the best part of every day, even the ones we're apart.",
+    "String theory brought us together."
+  ];
+
+  var ENVELOPES = [
+    { id: "exam-stress", topic: "you're stressed about an exam", emoji: "📚",
+      msg: "Okay Madz, hear me out. You've studied, you're smart, and this test has nothing on you. Take a deep breath, crush it, and call me after so I can say \"told you so.\"" },
+    { id: "test-now", topic: "you're about to walk into a test", emoji: "✏️",
+      msg: "Relax your shoulders. Take a deep breath. Read the questions twice. You've totally got this. Go." },
+    { id: "miss-me", topic: "you miss me", emoji: "🥺",
+      msg: "Unfortunately I miss you more. Every day apart is one day closer to you in my arms again. I can't wait till I can give you a massive hug. Now call me." },
+    { id: "cant-sleep", topic: "you can't sleep", emoji: "🌙",
+      msg: "Close your eyes and clear your mind, nothing else matters right now besides rest. Try to pretend I'm scratching your head. You'll be out in like two minutes, you usually are with me <3. Goodnight Maddie I love you." },
+    { id: "laugh", topic: "you need a laugh", emoji: "😂",
+      msg: "Well, this is awkward, because you're usually the funny one, but I'm supposed to cheer you up… Let me take a shot at it, picture me performing on Dancing with the Stars. There you go." },
+    { id: "bad-day", topic: "you had a bad day", emoji: "🌧️",
+      msg: "Today can kick rocks. Take a hot shower, get comfy, eat something amazing, and text me so I can complain about it with you. Tomorrow's a new day, and I'm always in your corner." },
+    { id: "awesome", topic: "you did something awesome", emoji: "🎉",
+      msg: "LET'S GOOO MADDIE. I knew you would. I'm so proud of you. Tell me everything immediately." },
+    { id: "hear-it", topic: "you just need to hear it", emoji: "💗",
+      msg: "I love you so much. Good days, bad days, long distance days, all of them. You're stuck with me, Madz." },
+    { id: "night-before", topic: "it's the night before I visit", emoji: "✈️",
+      msg: "TOMORROWWWWWW. Get some sleep please, because I'm not letting you go once I see you" },
+    { id: "hug", topic: "you need a hug", emoji: "🤗",
+      msg: "Close your eyes, squeeze a pillow, and pretend it's me. I know it's not as good, but the real one's coming soon, and it's gonna be an amazing one." },
+    { id: "mad", topic: "you're mad at me", emoji: "😤",
+      msg: "I know I'm not perfect, and sometimes I wrong you. But one thing for certain is I'll never stop loving you, not even for a second. I'm here for you, and I want to make this right." },
+    { id: "period", topic: "you're on your period", emoji: "🍫",
+      msg: "I'm gonna give periods a knuckle sandwich if it doesn't stop bothering you… Text me for free stuff! <3" }
+  ];
+
+  var STORE_KEY = "madz-opened-v1";
+
+  function loadOpened() {
+    try {
+      var raw = localStorage.getItem(STORE_KEY);
+      var arr = raw ? JSON.parse(raw) : [];
+      return Array.isArray(arr) ? arr : [];
+    } catch (e) { return []; }
+  }
+  function saveOpened(list) {
+    try { localStorage.setItem(STORE_KEY, JSON.stringify(list)); } catch (e) {}
+  }
+
+  // Today's note: based on local calendar day, cycles through all 30.
+  function dayIndex() {
+    var now = new Date();
+    var utcMidnight = Date.UTC(now.getFullYear(), now.getMonth(), now.getDate());
+    var days = Math.floor(utcMidnight / 86400000);
+    return ((days % NOTES.length) + NOTES.length) % NOTES.length;
+  }
+
+  function renderToday() {
+    var i = dayIndex();
+    var noteEl = document.getElementById("note");
+    noteEl.textContent = NOTES[i];
+    var num = document.createElement("span");
+    num.className = "num";
+    num.textContent = "Note " + (i + 1) + " of " + NOTES.length;
+    noteEl.appendChild(num);
+
+    document.getElementById("date").textContent = new Date().toLocaleDateString(undefined, {
+      weekday: "long", month: "long", day: "numeric"
+    });
+  }
+
+  var opened = loadOpened();
+  var grid = document.getElementById("grid");
+  var overlay = document.getElementById("overlay");
+  var current = null;
+
+  function renderGrid() {
+    grid.innerHTML = "";
+    ENVELOPES.forEach(function (env) {
+      var b = document.createElement("button");
+      b.type = "button";
+      b.className = "env" + (opened.indexOf(env.id) !== -1 ? " is-opened" : "");
+      b.setAttribute("aria-label", "Open when " + env.topic);
+      b.innerHTML =
+        '<div class="flap"></div>' +
+        '<div class="seal"></div>' +
+        '<span class="opened">opened</span>' +
+        '<div class="label"></div>';
+      b.querySelector(".seal").textContent = env.emoji;
+      b.querySelector(".label").textContent = "Open when " + env.topic;
+      b.addEventListener("click", function () { toggle(env); });
+      grid.appendChild(b);
+    });
+  }
+
+  function openEnv(env) {
+    current = env;
+    document.getElementById("letterTitle").textContent = "Open when " + env.topic;
+    document.getElementById("letterBody").textContent = env.msg;
+    overlay.classList.add("show");
+    document.body.style.overflow = "hidden";
+    if (opened.indexOf(env.id) === -1) {
+      opened.push(env.id);
+      saveOpened(opened);
+      renderGrid();
+    }
+    setTimeout(function () { document.getElementById("closeBtn").focus({ preventScroll: true }); }, 50);
+  }
+
+  function closeEnv() {
+    current = null;
+    overlay.classList.remove("show");
+    document.body.style.overflow = "";
+  }
+
+  function toggle(env) {
+    if (current && current.id === env.id) closeEnv(); else openEnv(env);
+  }
+
+  document.getElementById("closeBtn").addEventListener("click", closeEnv);
+  // Tapping the letter again (or the backdrop) closes it.
+  overlay.addEventListener("click", function (e) {
+    if (e.target.closest(".paper") && e.target.closest(".paper").scrollHeight > e.target.closest(".paper").clientHeight) return;
+    closeEnv();
+  });
+  document.addEventListener("keydown", function (e) { if (e.key === "Escape") closeEnv(); });
+
+  renderToday();
+  renderGrid();
+
+  // Refresh today's note if the app stays open past midnight.
+  var lastDay = dayIndex();
+  setInterval(function () {
+    if (dayIndex() !== lastDay) { lastDay = dayIndex(); renderToday(); }
+  }, 60000);
+  document.addEventListener("visibilitychange", function () {
+    if (!document.hidden && dayIndex() !== lastDay) { lastDay = dayIndex(); renderToday(); }
+  });
+</script>
+</body>
+</html>
