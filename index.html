@@ -71,6 +71,68 @@
   section { margin-bottom: 32px; }
 
   .note {
+    position: relative;
+    animation: fadeUp .6s ease both;
+  }
+  .today-env {
+    appearance: none;
+    border: none;
+    font: inherit;
+    color: inherit;
+    width: 100%;
+    display: block;
+    position: relative;
+    background: var(--pink-pale);
+    border-radius: 22px;
+    min-height: 170px;
+    box-shadow: var(--shadow);
+    overflow: hidden;
+    cursor: pointer;
+    transition: transform .15s ease;
+    animation: wiggle 3.5s ease-in-out 1.2s infinite;
+  }
+  .today-env:active { transform: scale(0.97); }
+  @keyframes wiggle {
+    0%, 86%, 100% { transform: rotate(0); }
+    89% { transform: rotate(-2deg); }
+    92% { transform: rotate(2deg); }
+    95% { transform: rotate(-1deg); }
+  }
+  .today-env .flap {
+    position: absolute;
+    inset: 0 0 auto 0;
+    height: 55%;
+    background: var(--pink-soft);
+    clip-path: polygon(0 0, 100% 0, 50% 100%);
+    transform-origin: top center;
+    transition: transform .45s ease;
+  }
+  .today-env .seal {
+    position: absolute;
+    left: 50%; top: 55%;
+    transform: translate(-50%, -50%);
+    width: 48px; height: 48px;
+    border-radius: 50%;
+    background: var(--pink);
+    color: #fff;
+    display: grid; place-items: center;
+    font-size: 1.4rem;
+    box-shadow: 0 3px 8px rgba(0,0,0,.15);
+    transition: transform .3s ease, opacity .3s ease;
+  }
+  .today-env .hint {
+    position: absolute;
+    left: 0; right: 0; bottom: 14px;
+    text-align: center;
+    font-weight: 700;
+    font-size: 1rem;
+    color: var(--pink);
+  }
+  .note.opening .today-env { animation: none; }
+  .note.opening .today-env .seal { transform: translate(-50%, -50%) scale(0); opacity: 0; }
+  .note.opening .today-env .flap { transform: rotateX(180deg); }
+  .today-card {
+    display: none;
     background: var(--card);
     border-radius: 22px;
     padding: 24px 22px;
@@ -79,15 +141,18 @@
     position: relative;
     font-size: 1.2rem;
     font-weight: 500;
-    animation: fadeUp .6s ease both;
   }
-  .note::before {
+  .today-card::before {
     content: "💌";
     position: absolute;
     top: -16px;
     right: 18px;
     font-size: 1.8rem;
   }
+  .note.is-open .today-env { display: none; }
+  .note.is-open .today-card { display: block; }
+  .note.just-opened .today-card { animation: popIn .55s cubic-bezier(.2, 1.3, .4, 1) both; }
+  @keyframes popIn { from { opacity: 0; transform: translateY(16px) scale(.94); } to { opacity: 1; transform: none; } }
   .note .num { display: block; font-size: 0.8rem; color: var(--muted); margin-top: 12px; font-weight: 600; }
   @keyframes fadeUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
 
@@ -249,7 +314,17 @@
 
   <section>
     <h2>Today's note</h2>
-    <div class="note" id="note"></div>
+    <div class="note" id="note">
+      <button class="today-env" id="todayEnv" type="button" aria-label="Open today's note">
+        <div class="flap"></div>
+        <div class="seal">♥</div>
+        <div class="hint">Tap to open today's note</div>
+      </button>
+      <div class="today-card" id="todayCard" aria-live="polite">
+        <span id="todayText"></span>
+        <span class="num" id="todayNum"></span>
+      </div>
+    </div>
   </section>
 
   <section>
@@ -357,19 +432,42 @@
     return ((days % NOTES.length) + NOTES.length) % NOTES.length;
   }
 
+  var TODAY_KEY = "madz-today-opened-v1";
+
+  function todayKey() {
+    var d = new Date();
+    return d.getFullYear() + "-" + (d.getMonth() + 1) + "-" + d.getDate();
+  }
+  function todayWasOpened() {
+    try { return localStorage.getItem(TODAY_KEY) === todayKey(); } catch (e) { return false; }
+  }
+  function markTodayOpened() {
+    try { localStorage.setItem(TODAY_KEY, todayKey()); } catch (e) {}
+  }
+
   function renderToday() {
     var i = dayIndex();
+    document.getElementById("todayText").textContent = NOTES[i];
+    document.getElementById("todayNum").textContent = "Note " + (i + 1) + " of " + NOTES.length;
     var noteEl = document.getElementById("note");
-    noteEl.textContent = NOTES[i];
-    var num = document.createElement("span");
-    num.className = "num";
-    num.textContent = "Note " + (i + 1) + " of " + NOTES.length;
-    noteEl.appendChild(num);
+    noteEl.classList.remove("opening", "just-opened");
+    noteEl.classList.toggle("is-open", todayWasOpened());
 
     document.getElementById("date").textContent = new Date().toLocaleDateString(undefined, {
       weekday: "long", month: "long", day: "numeric"
     });
   }
+
+  document.getElementById("todayEnv").addEventListener("click", function () {
+    var noteEl = document.getElementById("note");
+    if (noteEl.classList.contains("opening")) return;
+    noteEl.classList.add("opening");
+    markTodayOpened();
+    setTimeout(function () {
+      noteEl.classList.add("is-open", "just-opened");
+      noteEl.classList.remove("opening");
+    }, 550);
+  });
 
   var opened = loadOpened();
   var grid = document.getElementById("grid");
